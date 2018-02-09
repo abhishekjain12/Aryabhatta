@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0">
+    <title>BrainGames</title>
+    <link rel="stylesheet" href="res/cssfile.css" type="text/css" >
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script type="text/javascript" src="res/jsfile.js"></script>
+
+    <script type="text/javascript">
+        function checkExist() {
+            var xmlhttp = new XMLHttpRequest();
+            var username = document.forms["sign_in_form"]["username"].value;
+            var url = "exists.jsp?username=" + username;
+
+            if (username == "") {            }
+            else {
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        if(xmlhttp.responseText.trim() == 'available'){
+                            document.getElementById("checker").innerHTML = "fail";
+                            document.getElementById("error_no_user").style.display = "block";
+                            document.getElementById("available").style.display = "none";
+                            document.getElementById("error_username").style.display = "none";
+                            document.forms["sign_in_form"]["username"].classList.add("error-input");
+                        }
+                        else {
+                            document.getElementById("checker").innerHTML = "";
+                            document.getElementById("error_no_user").style.display = "none";
+                            document.getElementById("available").style.display = "block";
+                            document.getElementById("error_username").style.display = "none";
+                            document.forms["sign_in_form"]["username"].classList.remove("error-input");
+                        }
+                    }
+                };
+                try {
+                    xmlhttp.open("GET", url, true);
+                    xmlhttp.send();
+                } catch (e) {
+                    alert("unable to connect to server");
+                }
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div class="nav-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="main.html" class="logo">BrainGames</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="main.html#games">Games</a></li>
+                <li><a href="main.html#instructions">Instructions</a></li>
+                <li><a href="About-Us.html">About us</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="banner" style="text-align: center">
+    <h1 class="tagline">PLAY, SMARTER.</h1>
+    <h2 style="margin-top: -15px">Sign in to continue</h2>
+</div>
+<form id="sign_in_form" action="signIn" method="post" onsubmit="return validateSignInForm()">
+    <div id="username-card">
+        <div class="card">
+            <div class="user-image" style="bottom: 95px"></div>
+            <input required name="username" type="text" placeholder="Enter your username" onblur="checkExist()"  autofocus>
+            <span id="checker" style="display: none"></span>
+            <span id="error_no_user" class="error-msg" style="display: none;">Sorry, BrainGames doesn't recognize that username.</span>
+            <span id="available" class="error-msg" style="color: #4CAF50; display: none">You are in...</span>
+            <span id="error_username" class="error-msg" style="display:none;">Please enter your username.</span>
+            <a class="btn white-text hoverable" onclick="flip_username_card()" onkeypress="if(event.keyCode==13) flip_username_card();">
+                Next<i class="material-icons right">&#xE5C8;</i>
+            </a>
+            <br/><br/>
+            <a href="main.html" class="right">Need help?</a>
+        </div>
+
+        <div class="center-wrap">
+            <a href="sign-up.html" class="center">Create an account</a>
+        </div>
+    </div>
+
+    <div id="password-card" style="display:none;">
+        <div class="card">
+            <div class="user-image" style="bottom: 95px">
+                <img src="" id="photo" class="photo" style="padding-left: 0">
+            </div>
+            <input name="password" type="password" placeholder="Password">
+            <span id="error_password" class="error-msg" style="display:none;">Please enter your password.</span>
+            <button type="submit" class="btn white-text hoverable">Sign in<i class="material-icons right">&#xE5C8;</i></button>
+            <br/><br/>
+            <a href="sign-up.html" class="right">Forgot Password?</a>
+        </div>
+
+        <div class="center-wrap">
+            <a href="/" class="center" onclick="flip_password_card()">Sign in with a different account</a>
+        </div>
+    </div>
+</form>
+
+<div class="divider"></div>
+
+<footer>
+    <p>Copyright &copy; 2017 <a href="main.html">BrainGames</a> | All rights Reserved</p>
+</footer>
+
+</body>
+</html>

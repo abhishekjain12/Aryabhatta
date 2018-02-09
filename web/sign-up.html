@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0">
+    <title>BrainGames</title>
+    <link rel="stylesheet" href="res/cssfile.css" type="text/css" >
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script type="text/javascript" src="res/jsfile.js"></script>
+</head>
+
+<script type="text/javascript">
+    function checkExist() {
+        var xmlhttp = new XMLHttpRequest();
+        var username = document.forms["sign_up_form"]["username"].value;
+        var url = "exists.jsp?username=" + username;
+        var username_check = /(?=.*[a-zA-Z0-9]).{3,}/;
+
+        if (username == "" || !username_check.test(username)) {
+            document.getElementById("error_uname_invalid").style.display = "block";
+            document.getElementById("error_uname").style.display = "none";
+            document.getElementById("error_available").style.display = "none";
+        }
+        else {
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    if(xmlhttp.responseText.trim() == 'available'){
+                        document.getElementById("checker").innerHTML = "";
+                        document.getElementById("error_available").style.display = "block";
+                        document.getElementById("error_exists").style.display = "none";
+                        document.getElementById("error_uname").style.display = "none";
+                        document.getElementById("error_uname_invalid").style.display = "none";
+                        document.forms["sign_up_form"]["username"].classList.remove("error-input");
+                    }
+                    else {
+                        document.getElementById("checker").innerHTML = "fail";
+                        document.getElementById("error_available").style.display = "none";
+                        document.getElementById("error_exists").style.display = "block";
+                        document.getElementById("error_uname").style.display = "none";
+                        document.getElementById("error_uname_invalid").style.display = "none";
+                        document.forms["sign_up_form"]["username"].classList.add("error-input");
+                    }
+                }
+            };
+            try {
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+            } catch (e) {
+                alert("unable to connect to server");
+            }
+        }
+    }
+
+    function previewFile(){
+        var preview = document.getElementById('pic'); //selects the query named img
+        var file    = document.querySelector('input[type=file]').files[0]; //sames as here
+        var reader  = new FileReader();
+        var name = document.getElementById('photo').value;
+
+        reader.onloadend = function () {
+            preview.style.backgroundImage = "url('" + reader.result + "')";
+        }
+        if (file) {
+            reader.readAsDataURL(file); //reads the data as a URL
+        } else {
+            preview.src = "";
+        }
+    }
+
+    function transfer() {
+        var username = document.forms["sign_up_form"]["username"].value;
+        document.forms["photo_form"]["username"].value = username;
+    }
+
+</script>
+
+<body>
+
+<div class="nav-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="main.html" class="logo">BrainGames</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="main.html#games">Games</a></li>
+                <li><a href="main.html#instructions">Instructions</a></li>
+                <li><a href="About-Us.html">About us</a></li>
+                <li><a href="sign-in.html" class="btn-large hoverable green">Sign in</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="row">
+
+    <div class="col half">
+        <div class="center-wrap" style="height: 550px">
+        <div class="center">
+            <h2>Create your Brain Account</h2>
+            <h1 class="tagline">PLAY, SMARTER.</h1>
+            <h4 class="left-banner">Discover what you can do to challenge your brain.</h4>
+            <h4 class="left-banner">Push your cognitive skills, train harder and use your time better with fun, stimulating games and workouts.</h4>
+        </div>
+        </div>
+    </div>
+
+    <div class="col half">
+
+        <form id="photo_form" action="picSubmit" method="post" enctype="multipart/form-data" onkeypress="return event.keyCode != 13;">
+            <div class="user-image" id="pic">
+                <input type="file" name="file" id="photo" accept=".png, .jpg, .jpeg" class="photo" onchange="previewFile()">
+            </div>
+            <input type="hidden" name="username" value="">
+        </form>
+
+<form id="sign_up_form" action="signUp" method="post" onkeypress="return event.keyCode != 13;">
+    <div id="basic-detail-card" style="margin-top: -100px">
+        <div class="card">
+
+            <p><strong>Name</strong></p> <input name="name" type="text" autofocus>
+            <span id="error_name" class="error-msg" style="display:none;">You can't leave this empty.</span>
+
+            <p><strong>Your email address</strong></p> <input name="email" type="email">
+            <span id="error_email" class="error-msg" style="display:none;">You can't leave this empty.</span>
+            <span id="error_email_invalid" class="error-msg" style="display:none;">Invalid format. Try again?</span>
+
+            <p><strong>Choose your username</strong></p>
+            <input name="username" type="text" onblur="checkExist(); transfer();">
+            <span id="checker" style="display: none"></span>
+            <span id="error_available" class="error-msg" style="color: #4CAF50; display: none;">Username is available.</span>
+            <span id="error_exists" class="error-msg" style="display: none">That username is taken. Try another.</span>
+            <span id="error_uname" class="error-msg" style="display:none;">You can't leave this empty.</span>
+            <span id="error_uname_invalid" class="error-msg" style="display:none;">Invalid format. Try one with at least 3 characters.</span>
+
+            <p><strong>Create a password</strong></p> <input name="password" type="password">
+            <span id="error_password" class="error-msg" style="display:none;">You can't leave this empty.</span>
+            <span id="error_password_invalid" class="error-msg" style="display:none;">
+                Short passwords. Try one with at least 6 characters including uppercase, lowercase letters and numbers.
+            </span>
+
+            <p><strong>Confirm your password</strong></p> <input name="cpassword" type="password">
+            <span id="error_cpassword" class="error-msg" style="display:none;">You can't leave this empty.</span>
+            <span id="error_check_password" class="error-msg" style="display:none;">These passwords don't match. Try again?</span>
+
+            <div style="margin-top: 25px"></div>
+            <a class="btn white-text hoverable" onclick="flip_more_card()">
+                Next step <i class="material-icons right">&#xE5C8;</i>
+            </a>
+        </div>
+    </div>
+
+    <div id="more-detail-card" style="display: none; margin-top: -50px">
+        <div class="card" style="text-align: left">
+            <p><strong>Birthday</strong></p> <input id="Date" name="birthday" type="date" value="2017-01-01" min="1920-12-31">
+            <span id="error_birthday" class="error-msg" style="display:none;">You can't leave this empty.</span>
+
+            <p><strong>Gender</strong></p>
+            <input id="male" name="gender" type="radio" value="male"><label for="male">Male</label>
+            <input id="female" name="gender" type="radio" value="female"> <label for="female">Female</label>
+            <input id="not" name="gender" type="radio" value="rather not say" checked><label for="not">Rather not say</label>
+            <span id="error_gender" class="error-msg" style="display:none;">You can't leave this empty.</span>
+
+            <p><strong>Improve your focus while reading and listening</strong></p>
+            <input id="focusYes" name="focus" type="radio" value="yes"><label for="focusYes">Yes</label>
+            <input id="focusNO" name="focus" type="radio" value="no"><label for="focusNO">No</label>
+
+            <p><strong>Calculate more quickly and precisely</strong></p>
+            <input id="calYes" name="cal" type="radio" value="yes"><label for="calYes">Yes</label>
+            <input id="calNo" name="cal" type="radio" value="no"><label for="calNo">No</label>
+
+            <p><strong>Retain more of what you read and hear</strong></p>
+            <input id="memoryYes" name="memory" type="radio" value="yes"><label for="memoryYes">Yes</label>
+            <input id="memoryNo" name="memory" type="radio" value="no"><label for="memoryNo">No</label>
+
+            <p><strong>Your Hobbies</strong></p>
+            <input id="outdoor" name="outdoor" type="checkbox" value="outdoor"><label for="outdoor">Outdoor Gaming</label>
+            <input id="indoor" name="indoor" type="checkbox" value="indoor"><label for="indoor">Indoor Gaming</label><br/>
+            <input id="reading" name="reading" type="checkbox" value="reading"><label for="reading">Reading</label>
+            <input id="writing" name="writing" type="checkbox" value="writing"><label for="writing">Writing</label><br/>
+            <input id="watching" name="watching" type="checkbox" value="watching"><label for="watching">Watching TV or Videos</label>
+
+            <p><strong>Occupation</strong></p>
+            <input id="student" name="work" type="radio" value="student" checked><label for="student">Student</label>
+            <input id="banker" name="work" type="radio" value="banker"><label for="banker">Banker</label>
+            <input id="teacher" name="work" type="radio" value="teacher"><label for="teacher">Teacher</label>
+            <input id="other" name="work" type="radio" value="other"><label for="other">Other</label>
+            <span id="error_work" class="error-msg" style="display:none;">You can't leave this empty.</span>
+
+            <div style="margin-top: 25px;text-align: center">
+            <button type="submit" class="btn white-text hoverable">Submit<i class="material-icons right">&#xE163;</i></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+    </div>
+
+</div>
+
+<div class="divider"></div>
+
+<iframe name='frame_1' width='0px' height='0px' frameborder='0'></iframe>
+
+<footer>
+    <p>Copyright &copy; 2017 <a href="main.html">BrainGames</a> | All rights Reserved</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="BrainGames:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/BrainGames_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="BrainGames/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="BrainGames" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/../com.mysql.jdbc_5.1.5.jar" />
+          <element id="file-copy" path="C:/apache-tomcat-9.0.0.M17/lib/com.mysql.jdbc_5.1.5.jar" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
