@@ -6,7 +6,7 @@ public class DataBaseConnection {
 
     private static final String url = "jdbc:mysql://localhost:3306/brain-game";
     private static final String  uname = "root";
-    private static final String password = "";
+    private static final String password = "Future@4";
     private Connection connection = null;
 
     public Connection getDBConnection(){
